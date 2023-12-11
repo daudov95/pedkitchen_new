@@ -61,9 +61,8 @@
                                                             @foreach ($post->authors as $key => $author)
                                                                     <p style="margin:0">{{$author->name}}</p>
                                                             @endforeach
-                                                        @elseif(count($post->authors) > 3) {
+                                                        @elseif(count($post->authors) > 3)
                                                             Множество авторов
-                                                        }
                                                         @else 
                                                             Не указан
                                                         @endif
@@ -84,13 +83,6 @@
                                             @endforeach
                                     @endif
                                 </tbody>
-                                <tfoot>
-                                <tr>
-                                    <th rowspan="1" colspan="1">Заголовок</th>
-                                    <th rowspan="1" colspan="1">Автор</th>
-                                    <th rowspan="1" colspan="1">Действие</th>
-                                </tr>
-                                </tfoot>
                             </table>
                         </div>
                     </div>

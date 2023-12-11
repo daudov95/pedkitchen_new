@@ -56,10 +56,9 @@
                         <label for="title">Заголовок</label>
                         <input type="text" class="form-control" id="title" name="title" value="{{ $post->title }}" placeholder="Заголовок поста">
                     </div>
-                   
 
                     @if ($post->image)
-                        <img src="{{ asset('storage/'.$post->image) }}" alt="image" style="max-width: 100%">
+                        <img src="{{ asset('storage/'.$post->image) }}" alt="image" style="max-width: 100%; width: 500px;">
                     @endif
 
                     <div class="form-group">
@@ -135,7 +134,7 @@
                                 </div>
                             </div>
                         </div>
-                           
+                    
                     </div>
 
                     <div class="row">
@@ -201,10 +200,28 @@
                                         </div>
                                     </div>
                                 </div>
-        
-        
+
                             </div>
                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Выберите тип поста</label>
+                        <select class="form-control" name="is_video">
+                            <option value="0" {{ $post->is_video == 0 ? 'selected' : '' }}>Пост</option>
+                            <option value="1" {{ $post->is_video == 1 ? 'selected' : '' }}>Интервью</option>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="video">Ссылка на видео (Если тип поста «Интервью»)</label>
+                        <input type="text" class="form-control" id="video" name="video" value="{{ $post->video }}" placeholder="Ссылка">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="video">Описание видео (Если тип поста «Интервью»)</label>
+                        <textarea name="video_desc" class="form-control" rows="3" placeholder="Пишите...">{{ $post->video_desc }}</textarea>
                     </div>
                     
                 </div>

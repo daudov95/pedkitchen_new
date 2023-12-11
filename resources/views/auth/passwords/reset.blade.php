@@ -43,7 +43,7 @@
 
             </form>
         </div>
-        <div class="subscribe__right"></div>
+        <div class="subscribe__right" style="background-image: url('../assets/img/subscribe/bg.jpg')"></div>
     </div>
 
 </main>

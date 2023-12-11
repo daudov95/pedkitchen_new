@@ -11,6 +11,13 @@
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"
 />
+
+<style>
+	.swiper-button-next,
+	.swiper-button-prev {
+		color: #fff;
+	}
+</style>
 @endsection
 
 

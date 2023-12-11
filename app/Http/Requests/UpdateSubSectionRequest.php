@@ -24,9 +24,10 @@ class UpdateSubSectionRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => "required|max:255",
-            'image' => "image|max:200|mimes:png",
-            'menu' => "required|numeric|exists:menu_lists,id",
+            'title' => ['required','max:255'],
+            'image' => ['image', 'max:200', 'mimes:png'],
+            'menu' => ['required', 'numeric', 'exists:menu_lists,id'],
+            'order' => ['required', 'integer'],
         ];
     }
 
@@ -40,6 +41,8 @@ class UpdateSubSectionRequest extends FormRequest
             'image.mimes' => 'Неверный формат иконки. Нужен формат png',
             'menu.required' => 'Выберите раздел',
             'menu.exists' => 'Выберите раздел из списка',
+            'order.required' => 'Заполните поле для очередности',
+            'order.integer' => 'Поле для очередности должен состоять из цифр',
         ];
     }
 

@@ -24,9 +24,10 @@ class UpdateSectionRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => "required|max:255",
-            'image?' => "image|mimes:jpeg,jpg,png",
-            'content' => "required",
+            'title' => ['required','max:255'],
+            'image?' => ['image', 'mimes:jpeg,jpg,png'],
+            'content' => ['required'],
+            'order' => ['required', 'integer'],
         ];
     }
 
@@ -38,6 +39,8 @@ class UpdateSectionRequest extends FormRequest
             'image.image' => 'Выберите картинку',
             'image.mimes' => 'Неверный формат изображения. Возможные форматы (jpg, jpeg, png)',
             'content.required' => 'Заполните поле для описания',
+            'order.required' => 'Заполните поле для очередности',
+            'order.integer' => 'Поле для очередности должен состоять из цифр',
         ];
     }
 

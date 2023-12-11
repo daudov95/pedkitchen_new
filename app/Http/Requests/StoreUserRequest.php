@@ -24,7 +24,7 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => "required|max:20",
+            'name' => "required|max:50",
             'email' => "required|email|unique:users",
             'password' => "required|min:5",
         ];
@@ -34,7 +34,7 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'name.required' => 'Заполните поле для имени',
-            'name.max' => 'Максимум 20 символов',
+            'name.max' => 'Максимум 50 символов',
             'email.required' => 'Заполните поле для email',
             'email.email' => 'Некорректный email',
             'email.unique' => 'Такой email уже занят',

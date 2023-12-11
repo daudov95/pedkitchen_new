@@ -12,10 +12,10 @@ class MainController extends Controller
 
     public function pageView () {
 
-        $menu = new Menu();
+        $menu = Menu::query()->orderBy('order')->get();
 
         $banners = Banner::orderBy('banner_order', 'ASC')->limit(6)->get();
 
-        return view('index', ['menu' => $menu->all(), 'banners' => $banners]);
+        return view('index', compact('menu', 'banners'));
     }
 }

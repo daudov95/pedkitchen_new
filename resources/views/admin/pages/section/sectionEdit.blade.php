@@ -79,7 +79,11 @@
                         </div>
                     </div>
 
-                    
+                    <div class="form-group">
+                        <label for="order">Очередность (цифры)</label>
+                        <input type="number" min="0" class="form-control" id="order" name="order" value="{{ $section->order ?? 1 }}" placeholder="Введите очередность">
+                    </div>
+
                 </div>
 
                 <div class="card-footer">

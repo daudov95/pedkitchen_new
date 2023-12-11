@@ -20,7 +20,8 @@ class PostController extends Controller
         }
 
         $posts = $section->posts()->paginate(6);
-        $submenu = Submenu::where('parent_id', $category)->get();
+        $submenu = Submenu::query()->where('parent_id', $category)->orderBy('order')->get();
+        
 
         // dd(Menu::find($category)->posts()->paginate(6));
         return view('posts', ['posts' => $posts, 'menu' => $submenu, 'parentCategory' => $category]);
@@ -30,7 +31,8 @@ class PostController extends Controller
     public function categoryPosts ($category, $submenu) {
 
         $posts = Post::where('submenu_id', $submenu)->where('menu_id', $category)->paginate(6);
-        $submenuList = Submenu::where('parent_id', $category)->get();
+        $submenuList = Submenu::query()->where('parent_id', $category)->orderBy('order')->get();
+        
         $currentCategory = Submenu::where('id', $submenu)->where('parent_id', $category)->first();
 
         // dd($submenuList);

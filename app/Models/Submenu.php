@@ -10,5 +10,5 @@ class Submenu extends Model
     use HasFactory;
 
     protected $table = 'submenu_lists';
-    protected $fillable = ['title', 'icon', 'parent_id'];
+    protected $fillable = ['title', 'icon', 'parent_id', 'order'];
 }

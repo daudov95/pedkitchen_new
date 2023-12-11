@@ -43,15 +43,18 @@
                             <table id="example2" class="table table-bordered table-hover dataTable dtr-inline" aria-describedby="example2_info">
                                 <thead>
                                     <tr>
-                                        <th class="sorting sorting_desc" tabindex="0" aria-controls="example2" rowspan="1" colspan="6" width="95%" aria-sort="descending">Заголовок</th>
-                                        <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" >Действие</th>
+                                        <th class="sorting" width="50">Порядок</th>
+                                        <th class="sorting sorting_desc" tabindex="0" aria-controls="example2" width="95%" aria-sort="descending">Заголовок</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example2" >Действие</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @if($sections)
                                         @foreach ($sections as $section)
                                             <tr class="{{ $loop->odd ? 'odd' : 'even' }}">
-                                                <td class="dtr-control sorting_1" tabindex="0" colspan="6">
+                                                <td class="dtr-control sorting_1" width="50">{{ $section->order }}</td>
+
+                                                <td class="dtr-control sorting_1">
                                                     <a target="_blank" href="{{ route('posts', ['category' => $section->id]) }}">{{ $section->title }}</a>
                                                 </td>
                                                 
@@ -69,12 +72,6 @@
                                             @endforeach
                                     @endif
                                 </tbody>
-                                <tfoot>
-                                <tr>
-                                    <th rowspan="1" colspan="6" width="95%" >Заголовок</th>
-                                    <th rowspan="1" colspan="1">Действие</th>
-                                </tr>
-                                </tfoot>
                             </table>
                         </div>
                     </div>

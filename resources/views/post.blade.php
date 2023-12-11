@@ -1,60 +1,5 @@
 @extends('layouts.app')
 
-{{-- <style>
-   .tabs {
-	margin-top: 50px;
-    position: relative; /* Относительное позиционирование */
-   }
-   .tab, .tab-title {
-    display: inline-block; /* Выстраиваем по горизонтали */
-   }
-   .tab input[type="radio"] { display: none; }
-   .tab-title {
-    background: #ccc; /* Цвет фона */
-    padding: 5px 10px; /* Поля вокруг текста */
-    border: 1px solid #666; /* Параметры рамки */
-    border-bottom: none; /* Снизу линию убираем */
-   }
-   .tab-content {
-    position: absolute; /* Абсолютное позиционирование */
-    border: 1px solid #666; /* Параметры рамки */
-    padding: 10px; /* Поля вокруг текста */
-    left: 0; /* Размещаем у левого края */
-    width: calc(100% - 20px); /* Ширина содержимого */
-    display: none; /* Прячем вкладку */
-   }
-   .tab :checked + .tab-title {
-    position: relative; /* Относительное позиционирование */
-    background: #fff; /* Цвет фона */
-    top: 1px; /* Сдвигаем вниз */
-    z-index: 1; /* Отображаем поверх содержимого */
-   }
-   .tab :checked ~ .tab-content {
-    display: block; /* Показываем активную вкладку */
-   }
-
-   .post-single-content {
-	   display: flex;
-	   flex-direction: column;
-	   padding-bottom: 200px !important;
-   }
-
-   .post-single-content__img {
-	   width: 100%;
-	   /* text-align: center; */
-   }
-
-   img {
-	   max-width: 1000px !important;
-	   width: 100%;
-   }
-
-   h1 {
-	   margin-top: 20px !important;
-   }
-
-</style> --}}
-
 @section('content')
 	<main class="main archive__main">
 
@@ -104,7 +49,7 @@
 						{{-- @if (auth()->check()) --}}
 							<li class="archive-filter__item">
 								<a href="?Add">
-									<span>Добавить в «Мои избранные рецепты»</span>
+									<span>Добавить в «Мои избранные»</span>
 								</a>
 							</li>
 						{{-- @endif --}}
@@ -115,35 +60,61 @@
 				
 				<div class="post-single-content">
 
-					<div class="post-single-content__img">
-						<img src="{{ asset('storage/'.$post->image) }}">
-					</div>
-					<h1>{{ $post->title }}</h1>
-
-					<div class="tabs">
-						<ul class="container--tabs">
-							<li class="tab tab--active">{{ $post->tab1_title }}</li>
-							<li class="tab">{{ $post->tab2_title }}</li>
-							<li class="tab">{{ $post->tab3_title }}</li>
-							<li class="tab">{{ $post->tab4_title }}</li>
-						</ul>
-			
-						<div class="container--content">
-							<div class="content content--active">
-								<p>{{ $post->tab1_desc }}</p>
-							</div>
-							<div class="content">
-								<p>{{ $post->tab2_desc }}</p>
-							</div>
-							<div class="content">
-								<p>{{ $post->tab3_desc }}</p>
-							</div>
-							<div class="content">
-								<p>{{ $post->tab4_desc }}</p>
-							</div>
+					@if (!$post->is_video)
+						<div class="post-single-content__img">
+							<img src="{{ asset('storage/'.$post->image) }}">
 						</div>
-					</div>
+						<h1>{{ $post->title }}</h1>
 
+						@if($post->tab1_title)
+							<div class="tabs">
+								<ul class="container--tabs">
+									<li class="tab tab--active">{{ $post->tab1_title }}</li>
+									@if($post->tab2_title)<li class="tab">{{ $post->tab2_title }}</li>@endif
+									@if($post->tab3_title)<li class="tab">{{ $post->tab3_title }}</li>@endif
+									@if($post->tab4_title)<li class="tab">{{ $post->tab4_title }}</li>@endif
+								</ul>
+					
+								<div class="container--content">
+									<div class="content content--active">
+										<p>{{ $post->tab1_desc }}</p>
+									</div>
+									@if($post->tab2_desc)
+										<div class="content">
+											<p>{{ $post->tab2_desc }}</p>
+										</div>
+									@endif
+									@if($post->tab3_desc)
+										<div class="content">
+											<p>{{ $post->tab3_desc }}</p>
+										</div>
+									@endif
+									@if($post->tab4_desc)
+										<div class="content">
+											<p>{{ $post->tab4_desc }}</p>
+										</div>
+									@endif
+								</div>
+							</div>
+
+						@endif
+						
+					@endif
+					
+					@if ($post->is_video)
+						<div>
+							{{-- <video
+								width="1000px"
+								controls>
+								<source
+									src="{{ $post->video }}"
+									type="video/mp4" />
+								Your browser doesn't support HTML5 video tag.
+								</video> --}}
+								<iframe width="1000" height="600" src="{{ $post->video }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+						</div>
+						<div>{{ $post->video_desc }}</div>
+					@endif
 					
 
 				</div>

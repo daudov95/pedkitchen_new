@@ -132,7 +132,7 @@
                                 </div>
                             </div>
                         </div>
-                           
+                    
                     </div>
 
                     <div class="row">
@@ -202,6 +202,25 @@
         
                             </div>
                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Выберите тип поста</label>
+                        <select class="form-control" name="is_video">
+                            <option value="0" {{ old('is_video') === '0' ? 'selected' : '' }}>Пост</option>
+                            <option value="1" {{ old('is_video') === '1' ? 'selected' : '' }}>Интервью</option>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="video">Ссылка на видео (Если тип поста «Интервью»)</label>
+                        <input type="text" class="form-control" id="video" name="video" value="{{ old('video') }}" placeholder="Ссылка">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="video">Описание видео (Если тип поста «Интервью»)</label>
+                        <textarea name="video_desc" class="form-control" rows="3" placeholder="Пишите...">{{ old('video_desc') }}</textarea>
                     </div>
                     
                 </div>
