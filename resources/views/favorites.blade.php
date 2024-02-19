@@ -19,7 +19,7 @@
 					</h2>
 				</div>
 				<div class="archive-filter">
-					<ul class="archive-filter__list">
+					{{-- <ul class="archive-filter__list">
 						<li class="archive-filter__item">
 							<span>Подобрать педагогические ситуации</span>
 						</li>
@@ -47,7 +47,7 @@
 								<input type="checkbox" name="cb4" id="cb4">
 							</label>
 						</li>
-					</ul>
+					</ul> --}}
 				</div>
 
 				<div class="archive-posts">
@@ -60,7 +60,7 @@
 									<img src="{{ $post->image }}" alt="IMG">
 								</div>
 								<h4 class="archive-post__title">{{ $post->title }}</h4>
-								<span class="archive-post__category">Категория: {{ $post->category->title }}</span>
+								{{-- <span class="archive-post__category">Категория: {{ $post->category->title }}</span> --}}
 
 								<div class="archive-post-button">
 									<span class="archive-post__author">

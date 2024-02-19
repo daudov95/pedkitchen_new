@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreContactFormRequest;
+use App\Mail\QuestionResponse;
 use App\Models\Consultant;
 use App\Models\ContactForm;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 
 class ContactFormController extends Controller
 {
@@ -20,9 +23,20 @@ class ContactFormController extends Controller
     public function sendForm (StoreContactFormRequest $request) 
     {
         // dd($request->all());
-        $consultant = Consultant::find($request->authors);
 
-        $topic = $request->topic_select == 2 ? $request->topic : 'Консультация - '.$consultant->name;
+        if($request->authors == '0' && $request->topic_select == '1') {
+            return throw ValidationException::withMessages([
+                'message' => 'Выберите консультанта',
+            ]);
+        }
+
+        if($request->authors != '0') {
+            $consultant = Consultant::find($request->authors);
+            $topic = 'Консультация - '.$consultant->name;
+        } else {
+            $topic = $request->topic;
+        }
+        
 
         $req = ContactForm::query()->create([
             'name' => $request->name,
@@ -32,7 +46,7 @@ class ContactFormController extends Controller
             'topic_select' => $request->topic_select,
         ]);
 
-        if($req) {
+        if($req->exists) {
             return redirect()->back()->with('success', 'Вы успешно отправили форму, дождитесь ответа на почту.');
         }
 

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\Admin\BenefitsController;
+use App\Http\Controllers\Admin\DiagnosticController;
 use App\Http\Controllers\Admin\MainController as AdminMainController;
 use App\Http\Controllers\Admin\MonographCategoryController;
 use App\Http\Controllers\Admin\MonographsController;
@@ -159,6 +161,24 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'i
             Route::post('/category/delete', [MonographCategoryController::class, 'delete'])->name('category.delete');
         });
 
+        Route::group(['prefix' => 'diagnostic', 'as' => 'diagnostic.', 'controller' => DiagnosticController::class], function() {
+            Route::get('/', 'index')->name('all');
+            Route::get('/create', 'create')->name('create');
+            Route::post('/create', 'store')->name('store');
+            Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::post('/update', 'update')->name('update');
+            Route::post('/delete', 'delete')->name('delete');
+        });
+
+        Route::group(['prefix' => 'benefits', 'as' => 'benefits.', 'controller' => BenefitsController::class], function() {
+            Route::get('/', 'index')->name('all');
+            Route::get('/create', 'create')->name('create');
+            Route::post('/create', 'store')->name('store');
+            Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::post('/update', 'update')->name('update');
+            Route::post('/delete', 'delete')->name('delete');
+        });
+
         // Route::get('/', [AdminMainController::class, 'monographs'])->name('monographs');
         Route::get('/create', [AdminMainController::class, 'consultantCreatePage'])->name('create.page');
         Route::post('/create', [AdminMainController::class, 'consultantCreate'])->name('create');
@@ -186,9 +206,30 @@ Route::post('/contact-form', [ContactFormController::class, 'sendForm'])->name('
 
 Route::get('/faq', [FaqController::class, 'index'])->name('faq.page');
 Route::get('/about', [AboutController::class, 'index'])->name('about.page');
-Route::get('/monographs', [CookbookController::class, 'monographs'])->name('cookbook.monographs');
-Route::get('/monographs/{post}', [CookbookController::class, 'monograph'])->name('cookbook.monograph');
-Route::get('/monographs/category/{category}', [CookbookController::class, 'categoryMonographs'])->name('cookbook.category.monographs');
+// Route::get('/monographs', [CookbookController::class, 'monographs'])->name('cookbook.monographs');
+// Route::get('/monographs/{post}', [CookbookController::class, 'monograph'])->name('cookbook.monograph');
+// Route::get('/monographs/category/{category}', [CookbookController::class, 'categoryMonographs'])->name('cookbook.category.monographs');
+
+// Route::get('/monographs', [CookbookController::class, 'monographs'])->name('cookbook.monographs');
+
+Route::group(['prefix' => 'cookbook', 'as' => 'cookbook.', 'controller' => CookbookController::class], function() {
+
+    Route::get('/monographs', 'monographs')->name('monographs');
+    Route::get('/monographs/{post}', 'monograph')->name('monograph');
+    Route::get('/monographs/category/{category}', 'categoryMonographs')->name('category.monographs');
+
+
+    Route::get('/diagnostic', 'diagnostic')->name('diagnostic');
+    Route::get('/diagnostic/{post}', 'diagnosticShow')->name('diagnostic.show');
+    Route::get('/diagnostic/category/{category}', 'categoryDiagnostic')->name('category.diagnostic');
+
+
+    Route::get('/benefits', 'benefits')->name('benefits');
+    Route::get('/benefits/{post}', 'benefitsShow')->name('benefits.show');
+    Route::get('/benefits/category/{category}', 'categoryBenefits')->name('category.benefits');
+
+});
+
 
 // Profile
 

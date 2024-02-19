@@ -20,7 +20,7 @@
                 </li> 
             @endforeach
                 {{-- @if (auth()->check()) --}}
-                    {{-- <li class="archive-menu__item"><a href="{{ route('profile.favorites') }}" class="archive-menu__link archive--icon-wishlist">Мои избранные</a></li>  --}}
+                    <li class="archive-menu__item"><a href="{{ route('profile.favorites') }}" class="archive-menu__link archive--icon-wishlist">Мои избранные</a></li> 
                 {{-- @endif --}}
         </ul>
     @endif

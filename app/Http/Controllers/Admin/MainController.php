@@ -21,6 +21,7 @@ use App\Http\Requests\UpdateSectionRequest;
 use App\Http\Requests\UpdateSubSectionRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Mail\Distribution as MailDistribution;
+use App\Mail\QuestionResponse;
 use App\Models\Author;
 use App\Models\Banner;
 use App\Models\Category;
@@ -824,17 +825,19 @@ class MainController extends Controller
     public function contactMailStore(StoreAnswerRequest $request) {
         
         $user_id = Auth::id() ?? 1;
+        try {
+            $answer = ContactForm::findOrFail($request->id);
+            Mail::to($answer->email)->send(new QuestionResponse($request->message));
 
-        $menu = ContactForm::findOrFail($request->id)->replies()->create([
-            'user_id' => $user_id,
-            'message' => $request->message,
-            // 'question_id' => $user_id,
-        ]);
+            $answer->replies()->create([
+                'user_id' => $user_id,
+                'message' => $request->message,
+            ]);
+        } catch (\Throwable $th) {
+            session()->flash('error', 'Не удалось отправить ответ, попробуйте позже.');
+            return redirect()->back();
+        }
         
-        
-        
-        
-
         return redirect()->back();
     }
 

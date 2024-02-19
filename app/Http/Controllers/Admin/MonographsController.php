@@ -92,6 +92,7 @@ class MonographsController extends Controller
 
 
         if($post) {
+            $uploader->delete($post->image);
             $uploader->delete($post->document);
             $post->delete();
             session()->flash('success', "Монограф успешно удален!");

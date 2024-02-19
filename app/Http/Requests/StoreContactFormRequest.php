@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreContactFormRequest extends FormRequest
 {
@@ -24,13 +26,28 @@ class StoreContactFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'topic' => ['max:200'],
-            'authors' => ['max:200'],
-            'topic_select' => ['max:50'],
-            'topic' => ['max:200'],
             'name' => ['required', 'max:50'],
             'email' => ['required', 'email'],
+            'topic_select' => [Rule::notIn(['0']), 'required'],
             'message' => ['required', 'max:500'],
+            'authors' => [Rule::requiredIf($this->topic_select == '1'), 'max:200'],
+            'topic' => [Rule::requiredIf($this->topic_select == '2'), 'max:200'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'authors.required' => 'Выберите автора',
+            'authors.requiredIf' => 'Выберите автора',
+            'topic_select.required' => 'Выберите тему',
+            'topic_select.not_in' => 'Выберите тему',
+            'topic.required' => 'Введите тему',
+            'name.required' => 'Введите Имя',
+            'email.required' => 'Введите E-mail',
+            'name.email' => 'Некорректный E-mail адрес',
+            'message.required' => 'Введите ваще сообщение',
+            'message.max' => 'Текс должен быть меньше 500 символов',
         ];
     }
 }

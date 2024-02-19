@@ -46,7 +46,9 @@
                         <ul>
                             <li><a href="{{ route('cookbook.monographs') }}">Монографии</a></li>
                             <li><a href="#">Диссертации</a></li>
-                            <li><a href="#">Учебники и учебные пособия</a></li>
+                            {{-- <li><a href="{{ route('cookbook.benefits') }}">Учебники и учебные пособия</a></li> --}}
+                            <li><a href="{{ route('cookbook.benefits') }}">Пособия</a></li>
+                            <li><a href="{{ route('cookbook.diagnostic') }}">Диагностический инструментарий</a></li>
                         </ul>
                     </li>
                     <li class="header-menu__item"><a href="#" class="header-menu__link">Еда с доставкой</a></li>

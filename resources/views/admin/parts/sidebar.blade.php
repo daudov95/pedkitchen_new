@@ -301,24 +301,24 @@
               </li>
 
               <li class="nav-item">
-                <a href="{{ route('admin.user.all') }}" class="nav-link">
+                <a href="{{ route('admin.cookbook.monographs.all') }}" class="nav-link">
                   <i class="far fas fa-list nav-icon"></i>
                   <p>Диссертации</p>
                 </a>
               </li>
 
               <li class="nav-item">
-                <a href="{{ route('admin.user.all') }}" class="nav-link">
+                <a href="{{ route('admin.cookbook.benefits.all') }}" class="nav-link">
                   <i class="far fas fa-list nav-icon"></i>
-                  <p>Учебники и пособия</p>
+                  <p>Пособия</p>
                 </a>
               </li>
-              {{-- <li class="nav-item">
-                <a href="{{ route('admin.user.create.page') }}" class="nav-link">
-                  <i class="far fas fa-plus nav-icon"></i>
-                  <p>Новый пользователь</p>
+              <li class="nav-item">
+                <a href="{{ route('admin.cookbook.diagnostic.all') }}" class="nav-link">
+                  <i class="far fas fa-list nav-icon"></i>
+                  <p>Диагностический ин.</p>
                 </a>
-              </li> --}}
+              </li>
             </ul>
           </li>
           
