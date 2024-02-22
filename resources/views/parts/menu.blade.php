@@ -10,10 +10,10 @@
     <div class="mobile-menu__block">
         <h5 class="mobile-menu__title">Меню сайта</h5>
         <ul class="mobile-menu__list">
-            <li class="mobile-menu__item"><a href="#" class="mobile-menu__link">О нашей кухне</a></li>
-            <li class="mobile-menu__item"><a href="#" class="mobile-menu__link">Задать вопрос</a></li>
-            <li class="mobile-menu__item"><a href="#" class="mobile-menu__link">Часто задаваемые вопросы</a></li>
-            <li class="mobile-menu__item"><a href="#" class="mobile-menu__link">Контакты</a></li>
+            {{-- <li class="mobile-menu__item"><a href="#" class="mobile-menu__link">О нашей кухне</a></li> --}}
+            <li class="mobile-menu__item"><a href="{{ route('contactForm.page') }}" class="mobile-menu__link">Задать вопрос</a></li>
+            <li class="mobile-menu__item"><a href="{{ route('faq.page') }}" class="mobile-menu__link">Часто задаваемые вопросы</a></li>
+            <li class="mobile-menu__item"><a href="{{ route('about.page') }}" class="mobile-menu__link">Контакты</a></li>
         </ul>
     </div>
 
@@ -29,14 +29,14 @@
     </div>
 
 
-    <div class="mobile-menu__block" style="border-top: 1px solid white; padding-top: 10px;">
+    {{-- <div class="mobile-menu__block" style="border-top: 1px solid white; padding-top: 10px;">
         <ul class="mobile-menu__list">
             <li class="mobile-menu__item"><a href="#" class="mobile-menu__link">Кухонный инвентарь</a></li>
             <li class="mobile-menu__item"><a href="#" class="mobile-menu__link">Поваренные книги</a></li>
             <li class="mobile-menu__item"><a href="#" class="mobile-menu__link">Еда с доставкой</a></li>
             <li class="mobile-menu__item"><a href="#" class="mobile-menu__link">Праздничное меню</a></li>
         </ul>
-    </div>
+    </div> --}}
 
 
 </div>

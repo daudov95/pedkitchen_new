@@ -14,6 +14,7 @@ class PostController extends Controller
     // Get all posts
     public function allPosts ($category) {
         $section = Menu::find($category);
+        $myFavorites = auth()->user()->favorites ?? null;
 
         if(!$section) {
             return abort(404);
@@ -24,7 +25,7 @@ class PostController extends Controller
         
 
         // dd(Menu::find($category)->posts()->paginate(6));
-        return view('posts', ['posts' => $posts, 'menu' => $submenu, 'parentCategory' => $category]);
+        return view('posts', ['posts' => $posts, 'menu' => $submenu, 'parentCategory' => $category, 'my_favorites' => $myFavorites]);
     }
 
     // Get category posts
@@ -32,12 +33,13 @@ class PostController extends Controller
 
         $posts = Post::where('submenu_id', $submenu)->where('menu_id', $category)->paginate(6);
         $submenuList = Submenu::query()->where('parent_id', $category)->orderBy('order')->get();
+        $myFavorites = auth()->user()->favorites ?? null;
         
         $currentCategory = Submenu::where('id', $submenu)->where('parent_id', $category)->first();
 
         // dd($submenuList);
 
-        return view('posts', ['posts' => $posts, 'menu' => $submenuList, 'category' => $currentCategory, 'parentCategory' => $category]);
+        return view('posts', ['posts' => $posts, 'menu' => $submenuList, 'category' => $currentCategory, 'parentCategory' => $category, 'my_favorites' => $myFavorites]);
     }
 
     // Get single post

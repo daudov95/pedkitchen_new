@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use App\Models\User;
-use App\Models\Favorite;
-use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
@@ -13,24 +11,19 @@ class ProfileController extends Controller
 
     public function pageFavorites () {
 
-        $posts = Favorite::query()->where('user_id', auth()->id())->paginate(6);
-        dd($posts);
-        // $submenuList = Submenu::where('parent_id', $category)->get();
-        // $currentCategory = Submenu::where('id', $submenu)->where('parent_id', $category)->first();
-        // $submenu = Submenu::where('parent_id', $category)->get();
-        // dd();
+        $posts = Auth::user()->favorites()->orderByPivot('id', 'DESC')->paginate(6);
 
         return view('favorites', ['posts' => $posts, 'profile' => true]);
     }
 
     public function pageProfile () {
 
-        return view('profile.profile');
+        return view('profile.profile', ['profile' => true]);
     }
 
     public function pageSettings () {
 
-        return view('profile.settings');
+        return view('profile.settings', ['profile' => true]);
     }
 
 }

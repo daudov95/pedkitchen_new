@@ -47,11 +47,11 @@
 						</li>
 
 						{{-- @if (auth()->check()) --}}
-							<li class="archive-filter__item">
+							{{-- <li class="archive-filter__item">
 								<a href="?Add">
 									<span>Добавить в «Мои избранные»</span>
 								</a>
-							</li>
+							</li> --}}
 						{{-- @endif --}}
 						
 					</ul>

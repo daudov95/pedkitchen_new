@@ -125,9 +125,9 @@
 				<div class="archive-filter">
 					<ul class="archive-filter__list">
 
-						<li class="archive-filter__item">
+						{{-- <li class="archive-filter__item">
 							<span>Фильтр</span>
-						</li>
+						</li> --}}
 
 						{{-- <select id="a-select" multiple="multiple">
 							<option data-display="Select">все</option>
@@ -173,9 +173,12 @@
 							<div class="archive-post">
 								<div class="archive-post__img">
 									<img src="{{ asset('storage/'.$post->image) }}" alt="IMG">
-									<button class="archive-post__favorite">
-										<img src="{{ asset('assets/img/archive/icons/icon3.png') }}" alt="add to favorite" >
-									</button>
+									
+									@if (auth()->user() && !$my_favorites->filter(fn ($p) => $p->id == $post->id)->first())
+										<button class="archive-post__favorite" data-post-id="{{ $post->id }}">
+											<img src="{{ asset('assets/img/archive/icons/icon3.png') }}" alt="add to favorite" >
+										</button>
+									@endif
 								</div>
 								<h4 class="archive-post__title">{{ $post->title }}</h4>
 								<span class="archive-post__category">Категория: {{ $post->category_id ? $post->category->title : 'Не указано' }}</span>
@@ -225,3 +228,37 @@
 	</main>
 
 @endsection
+
+@if (auth()->user())
+	@section('scripts')
+		<script>
+			const addToFavorite = document.querySelectorAll('.archive-post__favorite');
+
+			addToFavorite.forEach(btn => btn.addEventListener('click', async (e) => {
+				e.preventDefault();
+				const target = e.currentTarget;
+				const data = {post_id: target.dataset.postId, user_id: {{ auth()->user()->id ?? null }}};
+
+				const headers = new Headers({
+					'Content-Type': 'application/json'
+				});
+				
+				let response = await fetch('/api/add-favourite', {
+					method: 'POST',
+					body: JSON.stringify(data),
+					headers: headers
+				})
+				response = await response.json();
+
+				if(response.status) {
+					alert(response.message);
+					target.remove();
+				}
+				else {
+					alert(response.message);
+				}
+
+			}))
+		</script>
+	@endsection
+@endif
