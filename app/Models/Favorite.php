@@ -11,4 +11,6 @@ class Favorite extends Model
 
     protected $table = 'favorite';
 
+    protected $fillable = ['post_id', 'user_id'];
+
 }

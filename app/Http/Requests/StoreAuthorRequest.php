@@ -24,7 +24,7 @@ class StoreAuthorRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => "required|max:20|unique:authors",
+            'name' => "required|max:40|unique:authors",
         ];
     }
 
@@ -32,7 +32,7 @@ class StoreAuthorRequest extends FormRequest
     {
         return [
             'name.required' => 'Заполните поле для имени',
-            'name.max' => 'Максимум 20 символов',
+            'name.max' => 'Максимум 40 символов',
             'name.unique' => 'Такой автор уже существует',
         ];
     }

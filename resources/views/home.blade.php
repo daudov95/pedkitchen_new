@@ -16,7 +16,7 @@
 
                     {{ __('You are logged in!') }}
 
-                    {{-- {{Auth::logout();}} --}}
+                    {{-- {{Auth::logout() }} --}}
                 </div>
             </div>
         </div>

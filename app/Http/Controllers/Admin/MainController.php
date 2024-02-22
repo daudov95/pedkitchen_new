@@ -21,6 +21,7 @@ use App\Http\Requests\UpdateSectionRequest;
 use App\Http\Requests\UpdateSubSectionRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Mail\Distribution as MailDistribution;
+use App\Mail\QuestionResponse;
 use App\Models\Author;
 use App\Models\Banner;
 use App\Models\Category;
@@ -34,6 +35,7 @@ use App\Models\ReplyContact;
 use App\Models\Submenu;
 use App\Models\Subscriber;
 use App\Models\User;
+use App\Services\Uploader\UploaderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -51,7 +53,7 @@ class MainController extends Controller
 
     // Раздел 
     public function sectionPage() {
-        $sections = Menu::orderBy('id', 'DESC')->Paginate(6);
+        $sections = Menu::orderBy('order', 'ASC')->Paginate(20);
 
         return view('admin.section', compact('sections'));
     }
@@ -74,7 +76,7 @@ class MainController extends Controller
             // Путь для сохранения
             $fileNameToStore = "image/section/".$filename."_".time().".".$extention;
             // Сохраняем файл
-            $path = $request->file('image')->storeAs('public/', $fileNameToStore);
+            $path = $request->file('image')->storeAs('/', $fileNameToStore);
         }
         
         // При выводе файла на странице нудно будет прибавить в начале "storage/"
@@ -86,6 +88,7 @@ class MainController extends Controller
             'title' => $request->title,
             'image' => $urlImage,
             'content' => $request->content,
+            'order' => $request->order
         ]);
 
         if(!$newSection) {
@@ -114,7 +117,7 @@ class MainController extends Controller
             $prevImage = $section->image;
             
             if(Storage::disk('public')->exists($prevImage)){
-                Storage::delete('public/'. $prevImage);
+                Storage::delete('/'. $prevImage);
             }
 
             // Имя и расширение файла
@@ -126,7 +129,7 @@ class MainController extends Controller
             // Путь для сохранения
             $fileNameToStore = "image/section/".$filename."_".time().".".$extention;
             // Сохраняем файл
-            $path = $request->file('image')->storeAs('public/', $fileNameToStore);
+            $path = $request->file('image')->storeAs('/', $fileNameToStore);
 
             $urlImage = $fileNameToStore;
         }
@@ -135,6 +138,7 @@ class MainController extends Controller
             'title' => $request->title,
             'image' => $urlImage,
             'content' => $request->content,
+            'order' => $request->order
         ]);
 
         session()->flash('success', "Раздел успешно обновлен!");
@@ -164,7 +168,7 @@ class MainController extends Controller
 
     // Подраздел
     public function subSectionPage() {
-        $subsections = Submenu::orderBy('id', 'DESC')->Paginate(6);
+        $subsections = Submenu::orderBy('id', 'DESC')->Paginate(20);
 
         return view('admin.subsection', compact('subsections'));
     }
@@ -188,7 +192,7 @@ class MainController extends Controller
             // Путь для сохранения
             $fileNameToStore = "image/subsection/".$filename."_".time().".".$extention;
             // Сохраняем файл
-            $path = $request->file('image')->storeAs('public/', $fileNameToStore);
+            $path = $request->file('image')->storeAs('/', $fileNameToStore);
         }
         
         // При выводе файла на странице нудно будет прибавить в начале "storage/"
@@ -200,6 +204,7 @@ class MainController extends Controller
             'title' => $request->title,
             'icon' => $urlImage,
             'parent_id' => $request->menu,
+            'order' => $request->order
         ]);
 
         if(!$newSection) {
@@ -229,7 +234,7 @@ class MainController extends Controller
             $prevImage = $section->icon;
             
             if(Storage::disk('public')->exists($prevImage)){
-                Storage::delete('public/'. $prevImage);
+                Storage::delete('/'. $prevImage);
             }
 
             // Имя и расширение файла
@@ -241,7 +246,7 @@ class MainController extends Controller
             // Путь для сохранения
             $fileNameToStore = "image/subsection/".$filename."_".time().".".$extention;
             // Сохраняем файл
-            $path = $request->file('image')->storeAs('public/', $fileNameToStore);
+            $path = $request->file('image')->storeAs('/', $fileNameToStore);
 
             $urlImage = $fileNameToStore;
         }
@@ -250,6 +255,7 @@ class MainController extends Controller
             'title' => $request->title,
             'icon' => $urlImage,
             'parent_id' => $request->menu,
+            'order' => $request->order
         ]);
 
         session()->flash('success', "Подраздел успешно обновлен!");
@@ -279,7 +285,7 @@ class MainController extends Controller
 
     // Категория
     public function categoryPage() {
-        $categories = Category::orderBy('id', 'DESC')->Paginate(6);
+        $categories = Category::orderBy('id', 'DESC')->Paginate(20);
 
         return view('admin.category', compact('categories'));
     }
@@ -346,7 +352,7 @@ class MainController extends Controller
 
     // Пост
     public function postPage() {
-        $posts = Post::orderBy('id', 'DESC')->Paginate(6);
+        $posts = Post::orderBy('id', 'DESC')->Paginate(20);
 
         return view('admin.post', compact('posts'));
     }
@@ -385,7 +391,7 @@ class MainController extends Controller
             // Путь для сохранения
             $fileNameToStore = "image/".$filename."_".time().".".$extention;
             // Сохраняем файл
-            $path = $request->file('image')->storeAs('public/', $fileNameToStore);
+            $path = $request->file('image')->storeAs('/', $fileNameToStore);
         }
         $urlImage = $fileNameToStore;
 
@@ -403,6 +409,9 @@ class MainController extends Controller
             'tab2_desc' => $request->tab2_desc,
             'tab3_desc' => $request->tab3_desc,
             'tab4_desc' => $request->tab4_desc,
+            'is_video' => intval($request->is_video),
+            'video' => $request->video ?? null,
+            'video_desc' => $request->video_desc ?? null,
         ]);
         $newPost->authors()->attach($request->authors);
 
@@ -424,7 +433,7 @@ class MainController extends Controller
             $prevImage = $post->image;
             
             if(Storage::disk('public')->exists($prevImage)){
-                Storage::delete('public/'. $prevImage);
+                Storage::delete('/'. $prevImage);
             }
             // Имя и расширение файла
             $filenameWithExt = $request->file('image')->getClientOriginalName();
@@ -435,7 +444,7 @@ class MainController extends Controller
             // Путь для сохранения
             $fileNameToStore = "image/".$filename."_".time().".".$extention;
             // Сохраняем файл
-            $path = $request->file('image')->storeAs('public/', $fileNameToStore);
+            $path = $request->file('image')->storeAs('/', $fileNameToStore);
 
             $urlImage = $fileNameToStore;
         }
@@ -454,6 +463,9 @@ class MainController extends Controller
             'tab2_desc' => $request->tab2_desc,
             'tab3_desc' => $request->tab3_desc,
             'tab4_desc' => $request->tab4_desc,
+            'is_video' => intval($request->is_video),
+            'video' => $request->video ?? null,
+            'video_desc' => $request->video_desc ?? null,
         ]);
 
         $post->authors()->sync($request->authors);
@@ -462,10 +474,11 @@ class MainController extends Controller
         return redirect()->back();
     }
 
-    public function postRemove(Request $request) {
+    public function postRemove(Request $request, UploaderService $uploader) {
         $post = Post::find($request->id);
 
         if($post) {
+            $uploader->delete($post->image);
             $post->delete();
             session()->flash('success', "Пост успешно удален!");
 
@@ -483,7 +496,7 @@ class MainController extends Controller
 
     // Автор
     public function authorPage() {
-        $authors = Author::orderBy('id', 'DESC')->Paginate(6);
+        $authors = Author::orderBy('id', 'DESC')->Paginate(20);
 
         return view('admin.author', compact('authors'));
     }
@@ -548,7 +561,7 @@ class MainController extends Controller
 
     // Пользователь
     public function userPage() {
-        $users = User::orderBy('id', 'DESC')->Paginate(6);
+        $users = User::orderBy('id', 'DESC')->Paginate(20);
 
         return view('admin.user', compact('users'));
     }
@@ -612,13 +625,13 @@ class MainController extends Controller
 
     // Подписчики
     public function subscribePage() {
-        $subscribers = Subscriber::paginate(6);
+        $subscribers = Subscriber::paginate(20);
 
         return view('admin.pages.subscriber.subscriber', compact('subscribers'));
     }
 
     public function subscribeMailPage() {
-        $subscribers = Subscriber::paginate(6);
+        $subscribers = Subscriber::paginate(20);
         $menu = Menu::all();
 
         return view('admin.pages.subscriber.mail', compact('subscribers', 'menu'));
@@ -646,7 +659,7 @@ class MainController extends Controller
 
     // Рассылки
     public function distributionPage() {
-        $distributions = Distribution::orderBy('id', 'DESC')->paginate(6);
+        $distributions = Distribution::orderBy('id', 'DESC')->paginate(20);
 
         // dd($distributions[0]->section);
 
@@ -682,7 +695,7 @@ class MainController extends Controller
 
     // Баннеры
     public function bannerPage() {
-        $banners = Banner::orderBy('banner_order', 'ASC')->Paginate(6);
+        $banners = Banner::orderBy('banner_order', 'ASC')->Paginate(20);
 
         return view('admin.pages.banner.banner', compact('banners'));
     }
@@ -704,7 +717,7 @@ class MainController extends Controller
             // Путь для сохранения
             $fileNameToStore = "image/banners/".$filename."_".time().".".$extention;
             // Сохраняем файл
-            $path = $request->file('image')->storeAs('public/', $fileNameToStore);
+            $path = $request->file('image')->storeAs('/', $fileNameToStore);
         }
         
         // При выводе файла на странице нудно будет прибавить в начале "storage/"
@@ -739,7 +752,7 @@ class MainController extends Controller
             $prevImage = $banner->image;
             
             if(Storage::disk('public')->exists($prevImage)){
-                Storage::delete('public/'. $prevImage);
+                Storage::delete('/'. $prevImage);
             }
             // Имя и расширение файла
             $filenameWithExt = $request->file('image')->getClientOriginalName();
@@ -750,7 +763,7 @@ class MainController extends Controller
             // Путь для сохранения
             $fileNameToStore = "image/banners/".$filename."_".time().".".$extention;
             // Сохраняем файл
-            $path = $request->file('image')->storeAs('public/', $fileNameToStore);
+            $path = $request->file('image')->storeAs('/', $fileNameToStore);
 
             $urlImage = $fileNameToStore;
         }
@@ -789,7 +802,7 @@ class MainController extends Controller
 
     // Контакт форма
     public function contactPage() {
-        $questions = ContactForm::orderBy('id', 'DESC')->Paginate(6);
+        $questions = ContactForm::orderBy('id', 'DESC')->Paginate(20);
 
         return view('admin.pages.contact.form.form', compact('questions'));
     }
@@ -812,17 +825,19 @@ class MainController extends Controller
     public function contactMailStore(StoreAnswerRequest $request) {
         
         $user_id = Auth::id() ?? 1;
+        try {
+            $answer = ContactForm::findOrFail($request->id);
+            Mail::to($answer->email)->send(new QuestionResponse($request->message));
 
-        $menu = ContactForm::findOrFail($request->id)->replies()->create([
-            'user_id' => $user_id,
-            'message' => $request->message,
-            // 'question_id' => $user_id,
-        ]);
+            $answer->replies()->create([
+                'user_id' => $user_id,
+                'message' => $request->message,
+            ]);
+        } catch (\Throwable $th) {
+            session()->flash('error', 'Не удалось отправить ответ, попробуйте позже.');
+            return redirect()->back();
+        }
         
-        
-        
-        
-
         return redirect()->back();
     }
 
@@ -850,7 +865,7 @@ class MainController extends Controller
 
     // FAQ
     public function faqPage() {
-        $faqs = Faq::orderBy('id', 'DESC')->Paginate(6);
+        $faqs = Faq::orderBy('id', 'DESC')->Paginate(20);
 
         // dd($faqs);
         return view('admin.pages.faq.index', compact('faqs'));
@@ -914,7 +929,7 @@ class MainController extends Controller
 
     // Consultant
     public function consultantPage() {
-        $consultants = Consultant::orderBy('id', 'DESC')->Paginate(6);
+        $consultants = Consultant::orderBy('id', 'DESC')->Paginate(20);
 
         return view('admin.pages.consultant.index', compact('consultants'));
     }

@@ -38,15 +38,17 @@
                             <li><a href="https://chspu.ru/technopark/">Технопарк универсальных педагогических компетенций</a></li>
                             <li><a href="https://chspu.ru/kvantorium/">Педагогический технопарк «Кванториум» имени профессора Ш. М-Х. Арсалиева</a></li>
                             <li><a href="https://chspu.ru/центр-продуктивного-образования-эк/">Центр продуктивного образования “Эковерситет”</a></li>
-                            <li><a href="#">Международная педагогическая мастерская победителей и лауреатов конкурсов «Учитель года» России, Беларуси и Казахстана</a></li>
+                            <li><a href="https://chspu.ru/41213-2/">Педагогическая мастерская Алихана Динаева</a></li>
                         </ul>
                     </li>
                     <li class="header-menu__item">
                         <a href="#" class="header-menu__link">Поваренные книги</a>
                         <ul>
-                            <li><a href="#">Монографии</a></li>
+                            <li><a href="{{ route('cookbook.monographs') }}">Монографии</a></li>
                             <li><a href="#">Диссертации</a></li>
-                            <li><a href="#">Учебники и учебные пособия</a></li>
+                            {{-- <li><a href="{{ route('cookbook.benefits') }}">Учебники и учебные пособия</a></li> --}}
+                            <li><a href="{{ route('cookbook.benefits') }}">Пособия</a></li>
+                            <li><a href="{{ route('cookbook.diagnostic') }}">Диагностический инструментарий</a></li>
                         </ul>
                     </li>
                     <li class="header-menu__item"><a href="#" class="header-menu__link">Еда с доставкой</a></li>

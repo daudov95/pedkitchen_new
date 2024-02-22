@@ -60,14 +60,15 @@
 					<input type="email" class="subscribe-form__input" placeholder="Ваш Email" name="email" value="{{ old('email') }}">
 
 					<select name="topic_select" class="subscribe-form__select topic-select">
-						<option>Выберете тему</option>
-						<option @if(old('topic_select') == 1) selected @endif value="1">Консультация</option>
-						<option @if(old('topic_select') == 2) selected @endif value="2">Другая тема</option>
+						<option value="0">Выберете тему</option>
+						<option value="1">Консультация</option>
+						<option value="2">Другая тема</option> 
+						{{-- @if(old('topic_select') == 2) --}}
 					</select>
 
 					{{-- @if (old('authors')) --}}
-						<select name="authors" class="subscribe-form__select authors authors-hide">
-							<option value="0">Выберете из списка</option>
+						<select name="authors" class="subscribe-form__select authors authors-hide" required>
+							<option value="0" selected>Выберете из списка</option>
 
 							@if (count($consultants))
 								@foreach ($consultants as $c)

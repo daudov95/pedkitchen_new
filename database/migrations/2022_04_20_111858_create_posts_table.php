@@ -20,14 +20,17 @@ return new class extends Migration
             $table->integer('menu_id');
             $table->integer('submenu_id');
             $table->integer('category_id');
-            $table->text('tab1_title');
-            $table->text('tab1_desc');
-            $table->text('tab2_title');
-            $table->text('tab2_desc');
-            $table->text('tab3_title');
-            $table->text('tab3_desc');
-            $table->text('tab4_title');
-            $table->text('tab4_desc');
+            $table->text('tab1_title')->nullable();
+            $table->text('tab1_desc')->nullable();
+            $table->text('tab2_title')->nullable();
+            $table->text('tab2_desc')->nullable();
+            $table->text('tab3_title')->nullable();
+            $table->text('tab3_desc')->nullable();
+            $table->text('tab4_title')->nullable();
+            $table->text('tab4_desc')->nullable();
+            $table->integer('is_video')->default(0);
+            $table->string('video')->nullable();
+            $table->text('video_desc')->nullable();
             $table->timestamps();
         });
     }

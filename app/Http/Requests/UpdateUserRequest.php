@@ -24,7 +24,7 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => "required|max:20",
+            'name' => "required|max:50",
             'email' => "required|email|",
             'password' => "required|min:5",
             'admin' => "",
@@ -35,7 +35,7 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name.required' => 'Заполните поле для имени',
-            'name.max' => 'Максимум 20 символов',
+            'name.max' => 'Максимум 50 символов',
             'email.required' => 'Заполните поле для email',
             'email.email' => 'Некорректный email',
             'password.required' => 'Заполните поле для пароля',

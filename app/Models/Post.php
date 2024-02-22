@@ -23,6 +23,9 @@ class Post extends Model
         'tab2_desc',
         'tab3_desc',
         'tab4_desc',
+        'is_video',
+        'video',
+        'video_desc',
     ];
 
     public function authors () {

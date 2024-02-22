@@ -277,6 +277,50 @@
               </li>
             </ul>
           </li>
+
+          <li class="nav-item {{ explode('.', request()->route()->getName())[1] == 'cookbook' ? 'menu-open' : '' }}">
+            <a href="{{ route('admin.cookbook.monographs.all') }}" class="nav-link {{ request()->routeIs('admin.cookbook.monographs.all') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+                Поваренные книги
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('admin.cookbook.monographs.all') }}" class="nav-link">
+                  <i class="far fas fa-list nav-icon"></i>
+                  <p>Монографии</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.cookbook.monographs.category') }}" class="nav-link">
+                  <i class="far fas fa-list nav-icon"></i>
+                  <p>Категории</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="{{ route('admin.cookbook.monographs.all') }}" class="nav-link">
+                  <i class="far fas fa-list nav-icon"></i>
+                  <p>Диссертации</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="{{ route('admin.cookbook.benefits.all') }}" class="nav-link">
+                  <i class="far fas fa-list nav-icon"></i>
+                  <p>Пособия</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.cookbook.diagnostic.all') }}" class="nav-link">
+                  <i class="far fas fa-list nav-icon"></i>
+                  <p>Диагностический ин.</p>
+                </a>
+              </li>
+            </ul>
+          </li>
           
           
         </ul>

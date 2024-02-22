@@ -1,8 +1,13 @@
 <?php
 
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\Admin\BenefitsController;
+use App\Http\Controllers\Admin\DiagnosticController;
 use App\Http\Controllers\Admin\MainController as AdminMainController;
+use App\Http\Controllers\Admin\MonographCategoryController;
+use App\Http\Controllers\Admin\MonographsController;
 use App\Http\Controllers\ContactFormController;
+use App\Http\Controllers\CookbookController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PostController;
@@ -22,35 +27,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [MainController::class, 'pageView'])->name('index');
 
-Route::get('/posts/category/{category}', [PostController::class, 'allPosts'])->name('posts');
-Route::get('/posts/category/{category}/{subcategory}', [PostController::class, 'categoryPosts'])->name('posts.subcategory');
-
-Route::get('/post/category/{category}/{subcategory}/{post}', [PostController::class, 'singlePost'])->name('post'); //{subcategory}
-Route::get('/post/{post}', [PostController::class, 'singlePostFree'])->name('post.free');
-
-Route::get('/subscribe/{category}', [SubscribeController::class, 'pageView'])->name('subscribe');
-Route::post('/subscribe', [SubscribeController::class, 'subscribe'])->name('subscribe.post');
-
-Route::get('/contact-form', [ContactFormController::class, 'index'])->name('contactForm.page');
-Route::post('/contact-form', [ContactFormController::class, 'sendForm'])->name('contactForm.send');
-
-Route::get('/faq', [FaqController::class, 'index'])->name('faq.page');
-Route::get('/about', [AboutController::class, 'index'])->name('about.page');
-
-// Profile
-
-Route::group(['prefix' => 'profile', 'as' => 'profile.', 'middleware' => 'auth'], function () {
-    Route::get('/', [ProfileController::class, 'pageProfile'])->name('main');
-    Route::get('settings', [ProfileController::class, 'pageSettings'])->name('settings');
-    Route::get('favorites', [ProfileController::class, 'pageFavorites'])->name('favorites');
-});
-
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'isAdmin']], function() {
@@ -165,4 +142,104 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'i
     Route::get('/users', [AdminMainController::class, 'userPage'])->name('users');
     Route::get('/subscribers', [AdminMainController::class, 'subscribePage'])->name('subscribers');
 
+
+    Route::group(['prefix' => 'cookbook', 'as' => 'cookbook.'], function() {
+
+        Route::group(['prefix' => 'monographs', 'as' => 'monographs.', 'controller' => MonographsController::class], function() {
+            Route::get('/', 'index')->name('all');
+            Route::get('/create', 'create')->name('create');
+            Route::post('/create', 'store')->name('store');
+            Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::post('/update', 'update')->name('update');
+            Route::post('/delete', 'delete')->name('delete');
+
+            Route::get('/category', [MonographCategoryController::class, 'index'])->name('category');
+            Route::get('/category/create', [MonographCategoryController::class, 'create'])->name('category.create');
+            Route::post('/category/create', [MonographCategoryController::class, 'store'])->name('category.store');
+            Route::get('/category/{post}', [MonographCategoryController::class, 'edit'])->name('category.edit');
+            Route::post('/category', [MonographCategoryController::class, 'update'])->name('category.update');
+            Route::post('/category/delete', [MonographCategoryController::class, 'delete'])->name('category.delete');
+        });
+
+        Route::group(['prefix' => 'diagnostic', 'as' => 'diagnostic.', 'controller' => DiagnosticController::class], function() {
+            Route::get('/', 'index')->name('all');
+            Route::get('/create', 'create')->name('create');
+            Route::post('/create', 'store')->name('store');
+            Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::post('/update', 'update')->name('update');
+            Route::post('/delete', 'delete')->name('delete');
+        });
+
+        Route::group(['prefix' => 'benefits', 'as' => 'benefits.', 'controller' => BenefitsController::class], function() {
+            Route::get('/', 'index')->name('all');
+            Route::get('/create', 'create')->name('create');
+            Route::post('/create', 'store')->name('store');
+            Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::post('/update', 'update')->name('update');
+            Route::post('/delete', 'delete')->name('delete');
+        });
+
+        // Route::get('/', [AdminMainController::class, 'monographs'])->name('monographs');
+        Route::get('/create', [AdminMainController::class, 'consultantCreatePage'])->name('create.page');
+        Route::post('/create', [AdminMainController::class, 'consultantCreate'])->name('create');
+        Route::get('/edit/{id}', [AdminMainController::class, 'consultantEditPage'])->name('edit');
+        Route::post('/update', [AdminMainController::class, 'consultantUpdate'])->name('update');
+        Route::post('/delete', [AdminMainController::class, 'consultantRemove'])->name('delete');
+    });
 });
+
+
+
+Route::get('/', [MainController::class, 'pageView'])->name('index');
+
+Route::get('/posts/category/{category}', [PostController::class, 'allPosts'])->name('posts');
+Route::get('/posts/category/{category}/{subcategory}', [PostController::class, 'categoryPosts'])->name('posts.subcategory');
+
+Route::get('/post/category/{category}/{subcategory}/{post}', [PostController::class, 'singlePost'])->name('post'); //{subcategory}
+Route::get('/post/{post}', [PostController::class, 'singlePostFree'])->name('post.free');
+
+Route::get('/subscribe/{category}', [SubscribeController::class, 'pageView'])->name('subscribe');
+Route::post('/subscribe', [SubscribeController::class, 'subscribe'])->name('subscribe.post');
+
+Route::get('/contact-form', [ContactFormController::class, 'index'])->name('contactForm.page');
+Route::post('/contact-form', [ContactFormController::class, 'sendForm'])->name('contactForm.send');
+
+Route::get('/faq', [FaqController::class, 'index'])->name('faq.page');
+Route::get('/about', [AboutController::class, 'index'])->name('about.page');
+// Route::get('/monographs', [CookbookController::class, 'monographs'])->name('cookbook.monographs');
+// Route::get('/monographs/{post}', [CookbookController::class, 'monograph'])->name('cookbook.monograph');
+// Route::get('/monographs/category/{category}', [CookbookController::class, 'categoryMonographs'])->name('cookbook.category.monographs');
+
+// Route::get('/monographs', [CookbookController::class, 'monographs'])->name('cookbook.monographs');
+
+Route::group(['prefix' => 'cookbook', 'as' => 'cookbook.', 'controller' => CookbookController::class], function() {
+
+    Route::get('/monographs', 'monographs')->name('monographs');
+    Route::get('/monographs/{post}', 'monograph')->name('monograph');
+    Route::get('/monographs/category/{category}', 'categoryMonographs')->name('category.monographs');
+
+
+    Route::get('/diagnostic', 'diagnostic')->name('diagnostic');
+    Route::get('/diagnostic/{post}', 'diagnosticShow')->name('diagnostic.show');
+    Route::get('/diagnostic/category/{category}', 'categoryDiagnostic')->name('category.diagnostic');
+
+
+    Route::get('/benefits', 'benefits')->name('benefits');
+    Route::get('/benefits/{post}', 'benefitsShow')->name('benefits.show');
+    Route::get('/benefits/category/{category}', 'categoryBenefits')->name('category.benefits');
+
+});
+
+
+// Profile
+
+Route::group(['prefix' => 'profile', 'as' => 'profile.', 'middleware' => 'auth'], function () {
+    Route::get('/', [ProfileController::class, 'pageProfile'])->name('main');
+    Route::get('settings', [ProfileController::class, 'pageSettings'])->name('settings');
+    Route::get('favorites', [ProfileController::class, 'pageFavorites'])->name('favorites');
+});
+
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

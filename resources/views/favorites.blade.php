@@ -2,6 +2,31 @@
 
 @section('content')
 
+
+	<style>
+		.archive-post__favorite {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			width: 30px !important;
+			height: 30px !important;
+			cursor: pointer;
+			opacity: 0;
+			transition: .3s opacity;
+		}
+
+		.archive-post__favorite img {
+			display: flex;
+			width: 20px;
+			height: 20px;
+			object-fit: contain;
+		}
+
+		.archive-post:hover .archive-post__favorite {
+			opacity: 1;
+		}
+	</style>
+
 	<main class="main archive__main">
 		
 		<div class="archive">
@@ -10,16 +35,16 @@
 			
 			<div class="archive__right">
 				<div class="archive-block">
-					<h2 class="archive__title archive__title--right">
-						@if (isset($category))
-							{{ $category->title }}
-						@else
-							Избранные
-						@endif
+					<h2 class="archive__title archive__title--right" style="display:flex;width:100%;justify-content: space-between;">
+						Избранные
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit">Выйти</button>
+                        </form>
 					</h2>
 				</div>
 				<div class="archive-filter">
-					<ul class="archive-filter__list">
+					{{-- <ul class="archive-filter__list">
 						<li class="archive-filter__item">
 							<span>Подобрать педагогические ситуации</span>
 						</li>
@@ -47,7 +72,7 @@
 								<input type="checkbox" name="cb4" id="cb4">
 							</label>
 						</li>
-					</ul>
+					</ul> --}}
 				</div>
 
 				<div class="archive-posts">
@@ -57,7 +82,13 @@
 						@foreach ($posts as $post)
 							<div class="archive-post">
 								<div class="archive-post__img">
-									<img src="{{ $post->image }}" alt="IMG">
+									<img src="{{ asset('storage/'.$post->image) }}" alt="IMG">
+
+									{{-- @if (auth()->user() && !$my_favorites->filter(fn ($p) => $p->id == $post->id)->first()) --}}
+										<button class="archive-post__favorite" data-post-id="{{ $post->id }}">
+											<img src="{{ asset('assets/img/archive/icons/remove-icon.svg') }}" alt="remove from favorites" >
+										</button>
+									{{-- @endif --}}
 								</div>
 								<h4 class="archive-post__title">{{ $post->title }}</h4>
 								<span class="archive-post__category">Категория: {{ $post->category->title }}</span>
@@ -84,26 +115,17 @@
 								</div>
 							</div>
 						@endforeach
-
+						
 						
 					@endif
 
-
 				</div>
 
-				{{-- <div class="archive-pagonation">
-
-					<div class="archive-pagonation__list">
-						<a href="#">«</a>
-						<a href="#">1</a>
-						<a href="#" class="active">2</a>
-						<a href="#">3</a>
-						<a href="#">4</a>
-						<a href="#">5</a>
-						<a href="#">6</a>
-						<a href="#">»</a>
+				<div class="archive-pagonation">
+					<div class="archive-pagonation__wrap">
+						{{ $posts->links() }}
 					</div>
-				</div> --}}
+				</div>
 
 			</div>
 		</div>
@@ -112,3 +134,40 @@
 	</main>
 
 @endsection
+
+
+@if (auth()->user())
+	@section('scripts')
+		<script>
+			const removeFromFavorite = document.querySelectorAll('.archive-post__favorite');
+
+			removeFromFavorite.forEach(btn => btn.addEventListener('click', async (e) => {
+				e.preventDefault();
+				const target = e.currentTarget;
+				const data = {post_id: target.dataset.postId, user_id: {{ auth()->user()->id ?? null }}};
+
+				// return console.log(data);
+
+				const headers = new Headers({
+					'Content-Type': 'application/json'
+				});
+				
+				let response = await fetch('/api/remove-favourite', {
+					method: 'POST',
+					body: JSON.stringify(data),
+					headers: headers
+				})
+				response = await response.json();
+
+				if(response.status) {
+					alert(response.message);
+					target.remove();
+				}
+				else {
+					alert(response.message);
+				}
+
+			}))
+		</script>
+	@endsection
+@endif

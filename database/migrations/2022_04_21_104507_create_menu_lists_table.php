@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('content');
             $table->string('image');
+            $table->integer('order')->default(0);
             $table->timestamps();
         });
     }

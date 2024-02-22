@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdatePostRequest extends FormRequest
 {
@@ -31,14 +32,17 @@ class UpdatePostRequest extends FormRequest
             'submenu' => "required|numeric|exists:submenu_lists,id",
             'category' => "required|numeric|exists:post_categories,id",
             'authors' => "required",
-            'tab1_title' => "required|max:255",
-            'tab1_desc' => "required",
-            'tab2_title' => "required|max:255",
-            'tab2_desc' => "required",
-            'tab3_title' => "required|max:255",
-            'tab3_desc' => "required",
-            'tab4_title' => "required|max:255",
-            'tab4_desc' => "required",
+            'tab1_title' => ['max:255'],
+            'tab1_desc' => ['nullable'],
+            'tab2_title' => ['max:255'],
+            'tab2_desc' => ['nullable'],
+            'tab3_title' => ['max:255'],
+            'tab3_desc' => ['nullable'],
+            'tab4_title' => ['max:255'],
+            'tab4_desc' => ['nullable'],
+            'is_video' => "required",
+            'video' => [Rule::requiredIf(intval($this->is_video)), 'url', 'nullable'],
+            'video_desc' => Rule::requiredIf(intval($this->is_video)),
         ];
     }
 
@@ -66,6 +70,10 @@ class UpdatePostRequest extends FormRequest
             'tab3_desc.required' => 'Заполните поле для описания таба 3',
             'tab4_desc.required' => 'Заполните поле для описания таба 4',
             'authors.required' => 'Выберите автора(ов)',
+            'is_video.required' => 'Выберите вид поста',
+            'video.required' => 'Заполните поле для ссылки',
+            'video.url' => 'Некорретный адрес на видео, введите ссылку',
+            'video_desc.required' => 'Заполните поле для описание видео',
         ];
     }
 

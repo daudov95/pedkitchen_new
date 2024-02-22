@@ -66,6 +66,10 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label for="order">Очередность (цифры)</label>
+                        <input type="number" min="0" class="form-control" id="order" name="order" value="{{ old('order') }}" placeholder="Введите очередность">
+                    </div>
                     
                 </div>
 
